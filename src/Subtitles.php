@@ -3,6 +3,7 @@
 interface SubtitleContract {
 
     public static function convert($from_file_path, $to_file_path);
+    public static function convertToUTF8($from_file_path, $to_file_path);
 
     public static function load($file_name_or_file_content, $extension = null); // load file
     public function save($file_name); // save file
@@ -31,6 +32,27 @@ class Subtitles implements SubtitleContract {
     public static function convert($from_file_path, $to_file_path)
     {
         static::load($from_file_path)->save($to_file_path);
+    }
+
+    public static function convertToUTF8($from_file_path, $to_file_path)
+    {
+        $myFile = pathinfo($from_file_path);
+        $fileName = $myFile['filename'];
+        $fileExt = $myFile['extension'];
+        $myfile = fopen($from_file_path, "r") or die("Unable to open file!");
+        $t = fread($myfile, filesize($from_file_path));
+        fclose($myfile);
+        $encoding = StringLib::str_detect_encoding($t);
+        if (!mb_detect_encoding($t, 'UTF-8', true)) {
+            $fp = fopen($to_file_path, "w");
+            // $o = iconv('WINDOWS-1256', "UTF-8", $t);
+            // $o = iconv('CP1256', "UTF-8", $t);
+            $o = iconv($encoding, "UTF-8", $t);
+            fwrite($fp, $o);
+            fclose($fp);
+            //unlink($file);
+        }
+        return  static::load($to_file_path);
     }
 
     public static function load($file_name_or_file_content, $extension = null)

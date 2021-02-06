@@ -292,6 +292,12 @@ our final approach into Coruscant.
         // var_dump($subtitles) ;
     }
 
+    /**
+     * @dataProvider pathProvider
+     */
+    public function testConvertToUTF8($input){
+        $this->assertTrue(!empty(Subtitles::convertToUTF8($input,$input . "conv")));
+    }
     public function pathProvider()
     {
         return array(
