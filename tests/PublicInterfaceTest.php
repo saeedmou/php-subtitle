@@ -1,9 +1,10 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
 use Done\Subtitles\Subtitles;
+use PHPUnit\Framework\TestCase;
 
-class PublicInterfaceTest extends TestCase {
+class PublicInterfaceTest extends TestCase
+{
 
     use AdditionalAssertions;
 
@@ -110,14 +111,14 @@ our final approach into Coruscant.
     public function testAddOrdersSubtitlesByTime()
     {
         $expected_internal_format = [[
-                'start' => 0,
-                'end' => 5,
-                'lines' => ['text 1'],
-            ], [
-                'start' => 10,
-                'end' => 15,
-                'lines' => ['text 2'],
-            ]];
+            'start' => 0,
+            'end' => 5,
+            'lines' => ['text 1'],
+        ], [
+            'start' => 10,
+            'end' => 15,
+            'lines' => ['text 2'],
+        ]];
 
         $subtitles = new Subtitles();
         $subtitles->add(10, 15, 'text 2');
@@ -279,6 +280,25 @@ our final approach into Coruscant.
 
     // ------------------------------------ shiftTimeGradually ---------------------------------------------------------
 
+    // ------------------------------------ My Mew Tests ---------------------------------------------------------------
 
+    /**
+     * @dataProvider pathProvider
+     */
+    public function testReadPersianSubtitlesFromFiles($input)
+    {
+        $subtitles = Subtitles::load($input);
+        $this->assertTrue(!empty($subtitles->getInternalFormat()));
+        // var_dump($subtitles) ;
+    }
 
+    public function pathProvider()
+    {
+        return array(
+            ['./tests/files/persian/1917.2019.1080p.720p.BluRay-[ANSI].srt', '', ''],
+            ['./tests/files/persian/1917.2019.1080p.720p.BluRay-[UTF-8].srt', '', ''],
+            ['./tests/files/persian/Soul.2020.WEB-DL.Fa[ANSI].srt', '', ''],
+            ['./tests/files/persian/Soul.2020.WEB-DL.Fa[UTF-8].srt', '', ''],
+        );
+    }
 }
