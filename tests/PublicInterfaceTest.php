@@ -340,6 +340,19 @@ our final approach into Coruscant.
      var_dump($subtitle);
     }
 
+    public function testRemoveTagsAndSpecialCharacters(){
+        $pathFrom='./tests/files/persian/1917.2019.1080p.720p.BluRay-[UTF-8].srt';
+        $pathTo='./tests/files/persian/1917.2019.1080p.720p.BluRay-[UTF-8].tagRemoved.srt';
+        $subtitle = Subtitles::loadUTF8Converted($pathFrom);
+        $subtitle->removeAllTags();
+        $subtitle->removeSpecialCharacters();
+        
+        $subtitle->save($pathTo);
+        $this->assertInstanceOf(Subtitles::class, $subtitle);
+
+        var_dump($subtitle) ;
+    }
+
     public function pathProvider()
     {
         return array(

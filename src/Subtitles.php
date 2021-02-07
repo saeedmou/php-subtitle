@@ -4,8 +4,10 @@ interface SubtitleContract {
 
     public static function convert($from_file_path, $to_file_path);
     public static function convertFileToUTF8($from_file_path, $to_file_path);
+    public static function convertSubtitleFileToUTF8($from_file_path, $to_file_path);
 
     public static function load($file_name_or_file_content, $extension = null); // load file
+    public static function loadUTF8Converted($file_name_or_file_content, $extension = null);
     public function save($file_name); // save file
     public function content($format); // output file content (instead of saving to file)
 
@@ -13,6 +15,10 @@ interface SubtitleContract {
     public function remove($from, $till); // delete text from subtitles
     public function shiftTime($seconds, $from = 0, $till = null); // add or subtract some amount of seconds from all times
     public function shiftTimeGradually($seconds_to_shift, $from = 0, $till = null);
+
+    public function removeAllTags();
+    public function removeSpecialCharacters();
+
 
     public function getInternalFormat();
     public function setInternalFormat(array $internal_format);
@@ -200,6 +206,51 @@ class Subtitles implements SubtitleContract {
     public function time($seconds, $from = null, $till = null)
     {
         return $this->shiftTime($seconds, $from, $till);
+    }
+
+
+    public function removeAllTags()
+    {
+        foreach ($this->internal_format as &$block) {
+            // $block['lines'] = strip_tags($block['lines']);
+            if (is_array($block['lines'])){
+                $specialSymb="sp#^nl%";
+                $tmp=implode($specialSymb,$block['lines']);
+                $tmp_stripped = strip_tags($tmp);
+                $block['lines']=explode($specialSymb,$tmp_stripped);
+            }else{
+                $block['lines'] = strip_tags($block['lines']);
+            }
+            var_dump($block['lines']);
+        }
+        unset($block);
+
+        $this->sortInternalFormat();
+
+        return $this;
+
+    }
+
+    public function removeSpecialCharacters()
+    {
+        foreach ($this->internal_format as &$block) {
+            // $block['lines'] = strip_tags($block['lines']);
+            if (is_array($block['lines'])){
+                $specialSymb="sp#^nl%";
+                $tmp=implode($specialSymb,$block['lines']);
+                $tmp_stripped = str_replace(["♪"],"",$tmp);
+                $block['lines']=explode($specialSymb,$tmp_stripped);
+            }else{
+                $block['lines'] = strip_tags($block['lines']);
+            }
+            var_dump($block['lines']);
+        }
+        unset($block);
+
+        $this->sortInternalFormat();
+
+        return $this;
+
     }
 
     // -------------------------------------- private ------------------------------------------------------------------
