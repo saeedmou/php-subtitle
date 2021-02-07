@@ -1,4 +1,4 @@
-<?php namespace Done\Subtitles;
+<?php namespace Saeedmou\Subtitles;
 
 class VttConverter implements ConverterContract {
 

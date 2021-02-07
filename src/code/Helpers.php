@@ -1,4 +1,4 @@
-<?php namespace Done\Subtitles;
+<?php namespace Saeedmou\Subtitles;
 
 class Helpers
 {
@@ -31,7 +31,7 @@ class Helpers
             throw new \Exception('unknown format: ' . $extension);
         }
 
-        $full_class_name = "\\Done\\Subtitles\\" . $class_name;
+        $full_class_name = "\\Saeedmou\\Subtitles\\" . $class_name;
 
         return new $full_class_name();
     }

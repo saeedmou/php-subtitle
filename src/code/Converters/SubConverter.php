@@ -1,4 +1,4 @@
-<?php namespace Done\Subtitles;
+<?php namespace Saeedmou\Subtitles;
 
 class SubConverter implements ConverterContract {
 
