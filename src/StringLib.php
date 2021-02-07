@@ -1,5 +1,5 @@
 <?php
-namespace Done\Subtitles;
+namespace Saeedmou\Subtitles;
 /**
  * Class StringLib
  *
