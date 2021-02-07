@@ -1,6 +1,6 @@
 <?php
 
-use Done\Subtitles\Subtitles;
+use Saeedmou\Subtitles\Subtitles;
 use PHPUnit\Framework\TestCase;
 
 class DfxpTest extends TestCase {
