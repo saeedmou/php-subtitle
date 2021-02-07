@@ -292,12 +292,54 @@ our final approach into Coruscant.
         // var_dump($subtitles) ;
     }
 
+
+        /**
+     * @dataProvider pathProvider
+     */
+    public function testLoadANSIPersianSubtitlesFromFiles($input)
+    {
+        $subtitle = Subtitles::loadUTF8Converted($input);
+        $this->assertInstanceOf(Subtitles::class, $subtitle);
+        var_dump($subtitle) ;
+    }
+
+            /**
+     * @dataProvider persianANSIStringProvider
+     */
+    public function testLoadANSIPersianSubtitlesFromString($input)
+    {
+        $subtitle = Subtitles::loadUTF8Converted($input,"srt");
+        $this->assertInstanceOf(Subtitles::class, $subtitle);
+        var_dump($subtitle) ;
+    }
+
+
+    
     /**
      * @dataProvider pathProvider
      */
-    public function testConvertToUTF8($input){
-        $this->assertTrue(!empty(Subtitles::convertToUTF8($input,$input . "conv")));
+    public function testConvertSubtitleFileToUTF8($input){
+        $path_parts=pathinfo($input);
+        $newPath=$path_parts['dirname'] . DIRECTORY_SEPARATOR . $path_parts['filename'] .".conv." . $path_parts['extension'];
+        $subtitle =Subtitles::convertSubtitleFileToUTF8($input,$newPath);
+        // $this->assertTrue(!empty($subtitle));
+        $this->assertInstanceOf(Subtitles::class, $subtitle);
+        var_dump($subtitle);
     }
+
+    /**
+     * @dataProvider pathProvider
+     */
+    public function testConvertFileToUtf8($input){
+        $path_parts=pathinfo($input);
+        $newPath=$path_parts['dirname'] . DIRECTORY_SEPARATOR . $path_parts['filename'] .".conv." . $path_parts['extension'];
+        $subtitle =Subtitles::convertFileToUTF8($input,$newPath);
+        // $this->assertTrue(!empty($subtitle));
+        $this->assertInstanceOf(Subtitles::class, $subtitle);
+
+     var_dump($subtitle);
+    }
+
     public function pathProvider()
     {
         return array(
@@ -306,5 +348,32 @@ our final approach into Coruscant.
             ['./tests/files/persian/Soul.2020.WEB-DL.Fa[ANSI].srt', '', ''],
             ['./tests/files/persian/Soul.2020.WEB-DL.Fa[UTF-8].srt', '', ''],
         );
+    }
+
+    public function persianANSIStringProvider()
+    {
+        return array(['1
+        00:00:01,448 --> 00:00:10,948
+        ����� �� ���� ����� ������ ����
+
+        2
+        00:00:11,948 --> 00:00:18,948
+        ������ ���� � ����� �� ��� ������
+        MrMovie.in
+
+        3
+        00:00:19,948 --> 00:00:26,948
+        ���� ������ ������� �����
+        MrSub.net
+
+        4
+        00:00:49,104 --> 00:00:52,659
+        6����� 1917
+        [��� ���� ����� �� �� ����� ���]
+
+        5
+        00:00:52,659 --> 00:00:58,080
+        "1917"
+        ']);
     }
 }
