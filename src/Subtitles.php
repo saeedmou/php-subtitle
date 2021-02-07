@@ -18,7 +18,10 @@ interface SubtitleContract {
 
     public function removeAllTags();
     public function removeSpecialCharacters();
+    public function removeBlacklistWords($blacklistArray);
+    public function convertCharacters($key);
 
+    
 
     public function getInternalFormat();
     public function setInternalFormat(array $internal_format);
@@ -221,7 +224,7 @@ class Subtitles implements SubtitleContract {
             }else{
                 $block['lines'] = strip_tags($block['lines']);
             }
-            var_dump($block['lines']);
+            // var_dump($block['lines']);
         }
         unset($block);
 
@@ -243,7 +246,7 @@ class Subtitles implements SubtitleContract {
             }else{
                 $block['lines'] = strip_tags($block['lines']);
             }
-            var_dump($block['lines']);
+            // var_dump($block['lines']);
         }
         unset($block);
 
@@ -253,6 +256,61 @@ class Subtitles implements SubtitleContract {
 
     }
 
+    public function removeBlacklistWords($blacklistArray)
+    {
+        for ($i=0; $i <count($this->internal_format) ; $i++) { 
+            $block=&$this->internal_format[$i];
+            if (is_array($block['lines'])){
+                $specialSymb="sp#^nl%";
+                $tmp=implode($specialSymb,$block['lines']);
+            }else{
+                $tmp = $block['lines'];
+            }
+            foreach ($blacklistArray as  $word) {
+                if(strpos($tmp,$word)!==false){
+                    unset($this->internal_format[$i]);
+                }
+            }
+        }
+
+        unset($block);
+
+        $this->sortInternalFormat();
+
+        return $this;
+
+    }
+    
+    public function convertCharacters($type){
+        $searchArray=array_keys(PersianHelper::getPersianMapArray()[$type]);
+        $replaceArray=array_values(PersianHelper::getPersianMapArray()[$type]);
+        $this->replaceArrays($searchArray, $replaceArray);
+    }
+
+
+    private function replaceArrays($searchArray, $replaceArray)
+    {
+        for ($i=0; $i <count($this->internal_format) ; $i++) { 
+            $block=&$this->internal_format[$i];
+            if (is_array($block['lines'])){
+                foreach ($block['lines'] as &$value) {
+                    $value=str_replace($searchArray,$replaceArray,$value);
+                }
+            }else{
+                $block['lines']=str_replace($searchArray,$replaceArray,$block['lines']);
+            }
+
+        }
+
+        unset($block);
+
+        $this->sortInternalFormat();
+
+        return $this;
+
+    }
+
+    
     // -------------------------------------- private ------------------------------------------------------------------
 
     protected function sortInternalFormat()

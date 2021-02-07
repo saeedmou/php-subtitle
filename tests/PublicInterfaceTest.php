@@ -346,7 +346,9 @@ our final approach into Coruscant.
         $subtitle = Subtitles::loadUTF8Converted($pathFrom);
         $subtitle->removeAllTags();
         $subtitle->removeSpecialCharacters();
-        
+        $subtitle->removeBlacklistWords(["زیرنویس","لینک مستقیم","فیلم و سریال","تقدیم به تمام پارسی زبانان جهان"]);
+        $subtitle->convertCharacters("ArrabicToPersianChar");
+        $subtitle->convertCharacters("EnglishToPersianNumberMap");
         $subtitle->save($pathTo);
         $this->assertInstanceOf(Subtitles::class, $subtitle);
 
