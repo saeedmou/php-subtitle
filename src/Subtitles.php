@@ -258,7 +258,7 @@ class Subtitles implements SubtitleContract {
 
     public function removeBlacklistWords($blacklistArray)
     {
-        echo count($this->internal_format);
+        // echo count($this->internal_format);
 
         for ($i=count($this->internal_format)-1; $i >= 0; $i--) { 
             $block=&$this->internal_format[$i];
