@@ -343,14 +343,14 @@ our final approach into Coruscant.
     public function testRemoveTagsAndSpecialCharacters(){
         $blacklist = explode("\r\n", file_get_contents('./tests/files/persian/blacklist.txt'));
         var_dump($blacklist);
-        $pathFrom='./tests/files/persian/Translated.Dreamland.2019.srt';
-        $pathTo='./tests/files/persian/Translated.Dreamland.2019.tagRemoved.srt';
+        $pathFrom='./tests/files/persian/Dreamland.2019.srt';
+        $pathTo='./tests/files/persian/Dreamland.2019.tagRemoved.srt';
         $subtitle = Subtitles::loadUTF8Converted($pathFrom);
         $subtitle->removeAllTags();
         $subtitle->removeSpecialCharacters();
-        $subtitle->removeBlacklistWords($blacklist);
         $subtitle->convertCharacters("ArrabicToPersianChar");
         $subtitle->convertCharacters("EnglishToPersianNumberMap");
+        $subtitle->removeBlacklistWords($blacklist);
         $subtitle->save($pathTo);
         $this->assertInstanceOf(Subtitles::class, $subtitle);
 
