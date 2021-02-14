@@ -268,9 +268,9 @@ class Subtitles implements SubtitleContract {
             }else{
                 $tmp = $block['lines'];
             }
-            $tmp=strtolower($tmp);
+            $tmp=trim(strtolower($tmp));
             foreach ($blacklistArray as  $word) {
-                if(strpos($tmp,strtolower($word))!==false){
+                if(strpos($tmp,trim(strtolower($word)))!==false){
                     unset($this->internal_format[$i]);
                 }
             }
